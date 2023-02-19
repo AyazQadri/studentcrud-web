@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './index.css';
 
 const StudentCrud = () => {
+  const [studentList, setStudentList] = useState([])
   const [student, setStudent] = useState(
     {
       name: "",
@@ -13,18 +14,18 @@ const StudentCrud = () => {
     }
   )
 
-  const handleTextFieldOnChange = (e) => 
+  const handleTextFieldOnChange = (e: any) => 
   {
     const { name, value } = e.target;
     setStudent({ ...student, [name]: value })
   }
 
-  const handleSubmit = (e) => 
+  const handleSubmit = (e: any) => 
   {
     e.preventDefault()
   }
 
-  const handleRoleChange = (event) => 
+  const handleRoleChange = (event: any) => 
   {
     setStudent({ ...student, role: event.target.value })
   };
