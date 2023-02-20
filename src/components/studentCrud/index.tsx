@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { httpRequest } from '../../services/api.services';
+import { endPoints } from '../../services/endpoints';
 import './index.css';
 
 const StudentCrud = () => {
@@ -10,7 +12,7 @@ const StudentCrud = () => {
       class: "",
       phone: "",
       cnic: "",
-      role: ""
+      role_id: 1
     }
   )
 
@@ -20,16 +22,45 @@ const StudentCrud = () => {
     setStudent({ ...student, [name]: value })
   }
 
+  
+  const handleRoleChange = (event: any) => 
+  {
+    setStudent({ ...student, role_id: event.target.value })
+  };
+  
   const handleSubmit = (e: any) => 
   {
     e.preventDefault()
+    const body: any = 
+    {
+      name: student.name,
+      description: student.description,
+      class: student.class,
+      phone: student.phone,
+      cnic: student.cnic,
+      role: student.role_id
+    }
+    httpRequest(endPoints.createStudent, 'POST', body).then((response: any) => {
+      console.log(response, 'console of create student response')
+    }).catch((error: any) => {
+      console.log(error, 'console of create student error')
+    })
   }
 
-  const handleRoleChange = (event: any) => 
+  const getAllStudents = () => 
   {
-    setStudent({ ...student, role: event.target.value })
-  };
+    httpRequest(endPoints.getAllActiveStudents, "GET").then((response: any) => {
+      console.log(response, 'console of response of get all active students')
+    }).catch((error: any) => {
+      console.log(error, 'this is the console of error of get all active students')
+    })
+  } 
 
+  useEffect(() => 
+  {
+    getAllStudents()
+  }, [])
+  
 
   return (
     <>
@@ -52,7 +83,7 @@ const StudentCrud = () => {
               value={student.description}
               onChange={(event) => handleTextFieldOnChange(event)}
             />
-            <label htmlFor="class">Class:</label>
+            <label htmlFor="class">Classssssss:</label>
             <input
               type="text"
               name="class"
@@ -64,7 +95,8 @@ const StudentCrud = () => {
             <input
               type="text"
               name="phone"
-              placeholder='Enter Class*'
+              placeholder='Enter Phone*'
+              maxLength={11}
               value={student.phone}
               onChange={(event) => handleTextFieldOnChange(event)}
             />
@@ -72,7 +104,8 @@ const StudentCrud = () => {
             <input
               type="text"
               name="cnic"
-              placeholder='Enter Class*'
+              placeholder='Enter CNIC*'
+              maxLength={13}
               value={student.cnic}
               onChange={(event) => handleTextFieldOnChange(event)}
             />
@@ -83,8 +116,8 @@ const StudentCrud = () => {
                 <input
                   type="radio"
                   name="role"
-                  value="admin"
-                  checked={student.role === "admin"}
+                  value={1}
+                  checked={student.role_id === 1}
                   onChange={handleRoleChange}
                 />
                 Admin
@@ -93,8 +126,8 @@ const StudentCrud = () => {
                 <input
                   type="radio"
                   name="role"
-                  value="user"
-                  checked={student.role === "user"}
+                  value={2}
+                  checked={student.role_id === 2}
                   onChange={handleRoleChange}
                 />
                 User

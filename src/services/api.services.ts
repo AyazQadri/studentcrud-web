@@ -27,31 +27,32 @@ const getHeaders = (method: string, token?: string): Record<string, string> =>
 }
   
 
-export const httpRequest = (endpoint: string, method: string, query?: string, token?: string, body?: any): Promise<AxiosResponse> => 
+export const httpRequest = (endpoint: string, method: string, body?: any, query?: string, token?: string,): Promise<AxiosResponse> => 
 {
-  const completeUrl = query ? `${endpoint}/${query}` : endpoint;
-  const headers = getHeaders(method, token);
-  const options: AxiosRequestConfig = { headers: headers };
-  console.log(options, 'console of options')
+    const baseUrl = "http://127.0.0.1:8000/api/";
+    const completeUrl = query ? `${ baseUrl + endpoint}/${query}` : baseUrl + endpoint;
+    const headers = getHeaders(method, token);
+    const options: AxiosRequestConfig = { headers: headers };
+    console.log(options, 'console of options')
 
-  if (body) 
-  {
-    options.data = body;
-  }
+    if (body) 
+    {
+        options.data = body;
+    }
 
-  switch(method) 
-  {
-    case 'GET':
-      return axios.get(completeUrl, options);
-    case 'POST':
-      return axios.post(completeUrl, body || {}, options);
-    case 'PUT':
-      return axios.put(completeUrl, body || {}, options);
-    case 'PATCH':
-      return axios.patch(completeUrl, body || {}, options);
-    case 'DELETE':
-      return axios.delete(completeUrl, options);
-    default:
-      throw new Error(`Invalid method: ${method}`);
-  }
+    switch(method) 
+    {
+        case 'GET':
+            return axios.get(completeUrl, options);
+        case 'POST':
+            return axios.post(completeUrl, body || {}, options);
+        case 'PUT':
+            return axios.put(completeUrl, body || {}, options);
+        case 'PATCH':
+            return axios.patch(completeUrl, body || {}, options);
+        case 'DELETE':
+            return axios.delete(completeUrl, options);
+        default:
+            throw new Error(`Invalid method: ${method}`);
+    }
 }
